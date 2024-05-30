@@ -1,43 +1,55 @@
+import api from "api/api";
 import React, { useState } from "react";
-import axios from "axios";
-import { useVideoQueue } from "../contexts/VideoQueueContext";
 
-const VideoSearch = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [videos, setVideos] = useState([]);
-  const { addVideoToQueue } = useVideoQueue();
-  const user = "Guest"; // Substitua pelo nome do usuário autenticado, se disponível
+const VideoSearch = ({ addVideo, username }) => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
 
-  const handleSearch = async () => {
-    const response = await axios.get(`http://localhost:5000/api/search`, {
-      params: { q: searchTerm },
-    });
-    setVideos(response.data.items);
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (query) {
+      const response = await api.get(`/api/search`, {
+        params: { q: query },
+      });
+      setResults(response.data.items);
+    }
   };
 
   const handleAddVideoToQueue = (video, user) => {
-    setVideos([]);
-    addVideoToQueue(video, user);
+    setResults([]);
+    addVideo(video, user);
   };
 
   return (
     <div>
-      <input
-        type="text"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <button onClick={handleSearch}>Buscar</button>
+      <form onSubmit={handleSearch}>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Procure vídeos no YouTube"
+        />
+        <button type="submit">Procurar</button>
+      </form>
       <div>
-        {videos.map((video) => (
+        {results.map((video) => (
           <div key={video.id.videoId}>
             <img
               src={video.snippet.thumbnails.default.url}
               alt={video.snippet.title}
             />
-            <p>{video.snippet.title}</p>
-            <button onClick={() => handleAddVideoToQueue(video, user)}>
-              Adicionar à Fila
+            <div>{video.snippet.title}</div>
+            <button
+              onClick={() =>
+                handleAddVideoToQueue({
+                  id: video.id.videoId,
+                  title: video.snippet.title,
+                  thumbnail: video.snippet.thumbnails.default.url,
+                  user: username,
+                })
+              }
+            >
+              Adicionar à festa
             </button>
           </div>
         ))}

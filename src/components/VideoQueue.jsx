@@ -1,74 +1,65 @@
 import React from "react";
-import { useVideoQueue } from "../contexts/VideoQueueContext";
-// import { useDrag, useDrop } from "react-dnd";
-const style = {
-  border: "1px dashed gray",
-  padding: "0.5rem 1rem",
-  marginBottom: ".5rem",
-  backgroundColor: "white",
-  cursor: "move",
-  // opacity: isDragging ? 0.5 : 1,
-};
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const VideoQueueItem = ({ video, index, moveVideo, removeVideo }) => {
-  const ref = React.useRef(null);
-  // const [, drop] = useDrop({
-  //   accept: "video",
-  //   collect(monitor) {
-  //     return {
-  //       handlerId: monitor.getHandlerId(),
-  //     };
-  //   },
-  //   hover(item) {
-  //     if (!ref.current) {
-  //       return;
-  //     }
-  //     if (item.index !== index) {
-  //       moveVideo(item.index, index);
-  //       item.index = index;
-  //     }
-  //   },
-  // });
+const VideoQueue = ({ videos, removeVideo, updateVideoOrder }) => {
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
 
-  // const [{ isDragging }, drag] = useDrag({
-  //   type: "video",
-  //   item: { index },
-  //   collect: (monitor) => ({
-  //     isDragging: monitor.isDragging(),
-  //   }),
-  // });
+    const reorderedVideos = Array.from(videos);
+    const [removed] = reorderedVideos.splice(result.source.index, 1);
+    reorderedVideos.splice(result.destination.index, 0, removed);
 
-  // const opacity = isDragging ? 0 : 1;
-  // drag(drop(ref));
+    updateVideoOrder(reorderedVideos);
+  };
 
   return (
-    <div ref={ref} style={{...style}}>
-      <img
-        src={video.snippet.thumbnails.default.url}
-        alt={video.snippet.title}
-      />
-      <p>{video.snippet.title}</p>
-      <p>{video.user}</p>
-      <button onClick={() => removeVideo(index)}>Remover</button>
-    </div>
-  );
-};
-
-const VideoQueue = () => {
-  const { queue, moveVideo, removeVideoFromQueue } = useVideoQueue();
-
-  return (
-    <div>
-      {queue.map((video, index) => (
-        <VideoQueueItem
-          key={video.id.videoId}
-          index={index}
-          video={video}
-          moveVideo={moveVideo}
-          removeVideo={removeVideoFromQueue}
-        />
-      ))}
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="videos">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {videos.map((video, index) => (
+              <Draggable key={video.id} draggableId={video.id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={{
+                      ...provided.draggableProps.style,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "10px",
+                      margin: "5px 0",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      style={{
+                        width: "50px",
+                        height: "auto",
+                        marginRight: "10px",
+                      }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      {video.title} ({video.user})
+                    </div>
+                    <button onClick={() => removeVideo(video.id)}>
+                      Remover
+                    </button>
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 
