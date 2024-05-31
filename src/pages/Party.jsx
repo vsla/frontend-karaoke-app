@@ -5,6 +5,7 @@ import VideoSearch from "components/VideoSearch";
 
 import api from "api/api";
 import UsernameForm from "components/UsernameForm";
+import { FaLock, FaRegCopy } from "react-icons/fa6";
 
 const Party = () => {
   const { code } = useParams();
@@ -61,21 +62,24 @@ const Party = () => {
     return <p>Carregando...</p>;
   }
 
+  if (!username) {
+    return <UsernameForm onSubmit={handleUsernameSubmit} />;
+  }
   return (
-    <div>
-      {!username ? (
-        <UsernameForm onSubmit={handleUsernameSubmit} />
-      ) : (
-        <>
-          <h1>Festa {code}</h1>
-          <VideoSearch addVideo={addVideo} username={username} />
-          <VideoQueue
-            videos={party.videos}
-            removeVideo={removeVideo}
-            updateVideoOrder={updateVideoOrder}
-          />
-        </>
-      )}
+    <div className="p-2">
+      <div className="flex mb-2">
+        <div className="text-xl mb-2 grow">Festa</div>
+        <button type="button" className="btn btn-outline-primary btn-xs border-gray-500 text-gray-500 text-xs hover:bg-transparent hover:text-gray-500">
+          <FaRegCopy className="mr-2"/>
+          Copiar Código da festa
+        </button>
+      </div>
+      <VideoSearch addVideo={addVideo} username={username} />
+      <VideoQueue
+        videos={party.videos}
+        removeVideo={removeVideo}
+        updateVideoOrder={updateVideoOrder}
+      />
     </div>
   );
 };

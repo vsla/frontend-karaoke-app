@@ -3,9 +3,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "pages/Home";
 import Party from "pages/Party";
 import Admin from "pages/Admin";
-// import { TouchBackend } from "react-dnd-touch-backend";
-// import { DndProvider } from "react-dnd";
-// import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const App = () => {
   // const [width, setWidth] = useState(window.innerWidth);

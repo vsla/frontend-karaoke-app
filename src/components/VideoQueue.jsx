@@ -14,9 +14,13 @@ const VideoQueue = ({ videos, removeVideo, updateVideoOrder }) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="videos">
+      <Droppable droppableId="droppable-video">
         {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
+          <div
+            {...provided.droppableProps}
+            className="divide-y divide-gray-600 max-w-2xl"
+            ref={provided.innerRef}
+          >
             {videos.map((video, index) => (
               <Draggable key={video.id} draggableId={video.id} index={index}>
                 {(provided) => (
@@ -24,17 +28,7 @@ const VideoQueue = ({ videos, removeVideo, updateVideoOrder }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    style={{
-                      ...provided.draggableProps.style,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "10px",
-                      margin: "5px 0",
-                      border: "1px solid #ccc",
-                      borderRadius: "4px",
-                      backgroundColor: "#fff",
-                    }}
+                    className=" px-2 py-1 flex items-center justify-center pt-2 my-1"
                   >
                     <img
                       src={video.thumbnail}
@@ -45,10 +39,13 @@ const VideoQueue = ({ videos, removeVideo, updateVideoOrder }) => {
                         marginRight: "10px",
                       }}
                     />
-                    <div style={{ flex: 1 }}>
+                    <div className="flex grow text-sm">
                       {video.title} ({video.user})
                     </div>
-                    <button onClick={() => removeVideo(video.id)}>
+                    <button
+                      className="py-1 px-2 items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                      onClick={() => removeVideo(video.id)}
+                    >
                       Remover
                     </button>
                   </div>
