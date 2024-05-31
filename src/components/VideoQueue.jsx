@@ -44,7 +44,7 @@ const VideoQueue = ({ videos, removeVideo, updateVideoOrder }) => {
                     </div>
                     <button
                       className="py-1 px-2 items-center gap-x-2 text-xs font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
-                      onClick={() => removeVideo(video.id)}
+                      onClick={() => removeVideo(video.videoId)}
                     >
                       Remover
                     </button>

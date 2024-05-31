@@ -34,6 +34,7 @@ const Party = () => {
   const addVideo = async (video) => {
     try {
       const response = await api.post(`/api/party/${code}/videos`, video);
+      
       setParty(response.data);
     } catch (error) {
       console.error("Erro ao adicionar vídeo", error);
@@ -43,7 +44,8 @@ const Party = () => {
   const removeVideo = async (videoId) => {
     try {
       const response = await api.delete(`/api/party/${code}/videos/${videoId}`);
-      setParty(response.data);
+      
+      setParty({...response.data});
     } catch (error) {
       console.error("Erro ao remover vídeo", error);
     }
