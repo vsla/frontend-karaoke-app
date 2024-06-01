@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "pages/Home";
 import Party from "pages/Party";
 import Admin from "pages/Admin";
+import VideoPlayer from "components/VideoPlayer";
 
 const App = () => {
   // const [width, setWidth] = useState(window.innerWidth);
@@ -28,6 +29,10 @@ const App = () => {
     {
       path: "/party/:code",
       element: <Party />,
+    },
+    {
+      path: "/party/:code/player",
+      element: <VideoPlayer />,
     },
     {
       path: "/admin",
