@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -10,7 +11,7 @@ const socket = io(process.env.REACT_APP_API_URL); // Adjust this URL as necessar
 const VideoPlayer = () => {
   const { code } = useParams();
   const [party, setParty] = useState(null);
-  var youtubePlayer = null;  
+
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -37,38 +38,37 @@ const VideoPlayer = () => {
     };
   }, [code]);
 
-  const createYoutubeVideo = () => {
-    const currentVideo = party && party.videos[0];
-
-    if (currentVideo) {
-      // the Player object is created uniquely based on the id in props
-      youtubePlayer = new window.YT.Player("karaoke-youtube-player", {
-        height: window.innerHeight - 80,
-        width: window.innerWidth - 50,
-        videoId: currentVideo.id,
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-        },
-      });
-    }
-  };
-
-  const onPlayerStateChange = (event) => {
-    console.log(event.data, window.YT.PlayerState);
-    if (event.data === window.YT.PlayerState.ENDED) {
-      setTimeout(() => {
-        nextVideo();
-      }, 3000);
-    }
-  };
-
   const onPlayerReady = (event) => {
     event.target.playVideo();
   };
 
   useEffect(() => {
     // On mount, check to see if the API script is already loaded
+    const createYoutubeVideo = () => {
+      const currentVideo = party && party.videos[0];
+
+      if (currentVideo) {
+        // the Player object is created uniquely based on the id in props
+        new window.YT.Player("karaoke-youtube-player", {
+          height: window.innerHeight - 80,
+          width: window.innerWidth - 50,
+          videoId: currentVideo.id,
+          events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+          },
+        });
+      }
+    };
+
+    const onPlayerStateChange = (event) => {
+      console.log(event.data, window.YT.PlayerState);
+      if (event.data === window.YT.PlayerState.ENDED) {
+        setTimeout(() => {
+          nextVideo();
+        }, 3000);
+      }
+    };
 
     if (!window.YT) {
       // If not, load the script asynchronously
@@ -101,8 +101,6 @@ const VideoPlayer = () => {
 
   return (
     <div>
-     
-
       {party.videos && party.videos.length > 0 ? (
         <div className="p-2">
           <div id="karaoke-youtube-player" className="min-h-screen-"></div>
