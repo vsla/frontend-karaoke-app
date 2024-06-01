@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {
   FaRegTrashCan,
   FaPlus,
-  FaCircleInfo,
   FaCircleCheck,
   FaXmark,
 } from "react-icons/fa6";

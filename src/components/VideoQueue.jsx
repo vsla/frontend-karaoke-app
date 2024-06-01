@@ -26,7 +26,10 @@ const VideoQueue = ({ videos, removeVideo, updateVideoOrder }) => {
     <>
       {videos.map((video, index) => {
         return (
-          <div className=" px-2 py-1 flex items-center justify-center pt-2 my-1">
+          <div
+            key={video.videoId}
+            className="px-2 py-1 flex items-center justify-center pt-2 my-1"
+          >
             <img
               src={video.thumbnail}
               alt={video.title}

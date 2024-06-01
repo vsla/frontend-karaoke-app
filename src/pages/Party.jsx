@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import VideoQueue from "components/VideoQueue";
 import VideoSearch from "components/VideoSearch";
-
 import api from "api/api";
 import UsernameForm from "components/UsernameForm";
-import { FaLock, FaRegCopy } from "react-icons/fa6";
+import { FaRegCopy } from "react-icons/fa6";
+import io from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_API_URL); // Adjust this URL as necessary
 
 const Party = () => {
   const { code } = useParams();
@@ -29,12 +31,23 @@ const Party = () => {
       }
     };
     fetchParty();
+
+    // Join the party room
+    socket.emit("joinParty", code);
+
+    // Listen for real-time updates to the queue
+    socket.on("updateQueue", (newQueue) => {
+      setParty((prevParty) => ({ ...prevParty, videos: newQueue }));
+    });
+
+    return () => {
+      socket.off("updateQueue");
+    };
   }, [code]);
 
   const addVideo = async (video) => {
     try {
       const response = await api.post(`/api/party/${code}/videos`, video);
-      
       setParty(response.data);
     } catch (error) {
       console.error("Erro ao adicionar vídeo", error);
@@ -44,8 +57,7 @@ const Party = () => {
   const removeVideo = async (videoId) => {
     try {
       const response = await api.delete(`/api/party/${code}/videos/${videoId}`);
-      
-      setParty({...response.data});
+      setParty({ ...response.data });
     } catch (error) {
       console.error("Erro ao remover vídeo", error);
     }
@@ -67,12 +79,16 @@ const Party = () => {
   if (!username) {
     return <UsernameForm onSubmit={handleUsernameSubmit} />;
   }
+
   return (
     <div className="p-2">
       <div className="flex mb-2">
         <div className="text-xl mb-2 grow">Festa</div>
-        <button type="button" className="btn btn-outline-primary btn-xs border-gray-500 text-gray-500 text-xs hover:bg-transparent hover:text-gray-500">
-          <FaRegCopy className="mr-2"/>
+        <button
+          type="button"
+          className="btn btn-outline-primary btn-xs border-gray-500 text-gray-500 text-xs hover:bg-transparent hover:text-gray-500"
+        >
+          <FaRegCopy className="mr-2" />
           Copiar Código da festa
         </button>
       </div>
