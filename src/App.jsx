@@ -27,6 +27,10 @@ const App = () => {
       element: <Home />,
     },
     {
+      path: "admin/party/:code",
+      element: <Party admin={true} />,
+    },
+    {
       path: "/party/:code",
       element: <Party />,
     },

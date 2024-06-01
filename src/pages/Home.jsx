@@ -23,8 +23,8 @@ const Home = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4 ">
-      <div class="card">
-        <div class="card-body">
+      <div className="card">
+        <div className="card-body">
           <h1 className="card-header justify-center">
             Bem vindo ao Karaoke Party
           </h1>
@@ -32,7 +32,7 @@ const Home = () => {
             <div className="w-full flex justify-center  pb-4">
               <button
                 onClick={handleCreateParty}
-                class="py-2 px-2 items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                className="py-2 px-2 items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
                 Nova festa
               </button>
@@ -40,7 +40,7 @@ const Home = () => {
 
             <div className=" w-full flex items-center flex-col pt-4">
               <input
-                class="py-2 px-3 block w-full border border-gray-500 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
+                className="py-2 px-3 block w-full border border-gray-500 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none "
                 placeholder="Código da festa"
                 type="text"
                 value={code}
@@ -49,7 +49,7 @@ const Home = () => {
 
               <button
                 onClick={handleJoinParty}
-                class=" mt-3 w-28 py-2 px-2 items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
+                className=" mt-3 w-28 py-2 px-2 items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none"
               >
                 Entre na festa
               </button>

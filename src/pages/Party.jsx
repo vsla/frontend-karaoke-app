@@ -9,7 +9,7 @@ import io from "socket.io-client";
 
 const socket = io(process.env.REACT_APP_API_URL); // Adjust this URL as necessary
 
-const Party = () => {
+const Party = ({admin = false}) => {
   const { code } = useParams();
   const [party, setParty] = useState(null);
   const [username, setUsername] = useState(
@@ -97,6 +97,7 @@ const Party = () => {
         videos={party.videos}
         removeVideo={removeVideo}
         updateVideoOrder={updateVideoOrder}
+        admin={admin}
       />
     </div>
   );

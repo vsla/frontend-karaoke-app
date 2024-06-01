@@ -43,6 +43,8 @@ const VideoPlayer = () => {
     if (currentVideo) {
       // the Player object is created uniquely based on the id in props
       youtubePlayer = new window.YT.Player("karaoke-youtube-player", {
+        height: window.innerHeight - 80,
+        width: window.innerWidth - 50,
         videoId: currentVideo.id,
         events: {
           onReady: onPlayerReady,
@@ -99,14 +101,15 @@ const VideoPlayer = () => {
 
   return (
     <div>
-      <h1>Video Player</h1>
-      <div id="karaoke-youtube-player" className="min-h-screen-"></div>
+     
+
       {party.videos && party.videos.length > 0 ? (
         <div className="p-2">
+          <div id="karaoke-youtube-player" className="min-h-screen-"></div>
           {/* <button onClick={playVideo}>Play</button>
             <button onClick={pauseVideo}>Pause</button> */}
           <button
-            className="btn btn-primary btn-sm text-sm"
+            className="btn btn-primary btn-sm text-sm mt-4"
             onClick={nextVideo}
           >
             Próximo vídeo
