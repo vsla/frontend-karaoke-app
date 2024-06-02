@@ -87,6 +87,9 @@ const Party = ({admin = false}) => {
         <button
           type="button"
           className="btn btn-outline-primary btn-xs border-gray-500 text-gray-500 text-xs hover:bg-transparent hover:text-gray-500"
+          onClick={() => {
+            navigator.clipboard.writeText(code);
+          }}
         >
           <FaRegCopy className="mr-2" />
           Copiar Código da festa
