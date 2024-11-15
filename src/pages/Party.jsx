@@ -4,12 +4,12 @@ import VideoQueue from "components/VideoQueue";
 import VideoSearch from "components/VideoSearch";
 import api from "api/api";
 import UsernameForm from "components/UsernameForm";
-import { FaRegCopy } from "react-icons/fa6";
+import { FaRegCopy, FaArrowUpRightFromSquare, FaHouse } from "react-icons/fa6";
 import io from "socket.io-client";
 
 const socket = io(process.env.REACT_APP_API_URL); // Adjust this URL as necessary
 
-const Party = ({admin = false}) => {
+const Party = ({ admin = false }) => {
   const { code } = useParams();
   const [party, setParty] = useState(null);
   const [username, setUsername] = useState(
@@ -81,27 +81,49 @@ const Party = ({admin = false}) => {
   }
 
   return (
-    <div className="p-2">
+    <div className="flex grow flex-col p-2 h-full w-full">
       <div className="flex mb-2">
         <div className="text-xl mb-2 grow">Festa</div>
+        <VideoSearch addVideo={addVideo} username={username} />
+      </div>
+      <div className="flex grow overflow-hidden">
+        {/* VideoQueue with scrollbar */}
+        <div className="flex grow overflow-y-auto">
+          <VideoQueue
+            videos={party.videos}
+            removeVideo={removeVideo}
+            updateVideoOrder={updateVideoOrder}
+            admin={admin}
+          />
+        </div>
+      </div>
+      <div className="flex justify-center mt-4">
         <button
           type="button"
-          className="btn btn-outline-primary btn-xs border-gray-500 text-gray-500 text-xs hover:bg-transparent hover:text-gray-500"
+          className="btn btn-outline-primary btn-sm border-gray-500 text-gray-500 text-xs hover:bg-transparent hover:text-gray-500 mr-2"
+          onClick={() => window.open(`/`)}
+        >
+          <FaHouse className="mr-2" />
+          Início
+        </button>
+        <button
+          className="btn btn-secondary btn-sm mr-2"
+          onClick={() => window.open(`/party/${code}/player`, "_blank")}
+        >
+          <FaArrowUpRightFromSquare className="mr-2" />
+          Abrir player
+        </button>
+        <button
+          type="button"
+          className="btn btn-outline-primary btn-sm border-gray-500 text-gray-500 text-xs hover:bg-transparent hover:text-gray-500"
           onClick={() => {
             navigator.clipboard.writeText(code);
           }}
         >
           <FaRegCopy className="mr-2" />
-          Copiar Código da festa
+          Copiar Código
         </button>
       </div>
-      <VideoSearch addVideo={addVideo} username={username} />
-      <VideoQueue
-        videos={party.videos}
-        removeVideo={removeVideo}
-        updateVideoOrder={updateVideoOrder}
-        admin={admin}
-      />
     </div>
   );
 };

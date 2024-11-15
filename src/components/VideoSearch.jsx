@@ -1,6 +1,6 @@
 import api from "api/api";
 import React, { useState, useRef, useEffect } from "react";
-import { FaRegTrashCan, FaPlus, FaCircleCheck, FaXmark } from "react-icons/fa6";
+import { FaPlus, FaCircleCheck, FaXmark } from "react-icons/fa6";
 
 import { VideoSearchItemsModal } from "./VideoSearchItemsModal";
 
