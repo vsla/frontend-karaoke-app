@@ -1,11 +1,6 @@
 import api from "api/api";
-import React, { useState } from "react";
-import {
-  FaRegTrashCan,
-  FaPlus,
-  FaCircleCheck,
-  FaXmark,
-} from "react-icons/fa6";
+import React, { useState, useRef, useEffect } from "react";
+import { FaRegTrashCan, FaPlus, FaCircleCheck, FaXmark } from "react-icons/fa6";
 
 import { VideoSearchItemsModal } from "./VideoSearchItemsModal";
 
@@ -14,17 +9,27 @@ const VideoSearch = ({ addVideo, username }) => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [addedSucess, setAddedSucess] = useState(false);
+  const [pageToken, setPageToken] = useState(""); // For pagination
+  const [hasMore, setHasMore] = useState(true); // Track if more results are available
+
+  const observerRef = useRef(); // For infinite scrolling
+  const videoListRef = useRef(); // Reference for the scrollable container
 
   const handleSearch = async (e) => {
     e.preventDefault();
     addedSucess && setAddedSucess(false);
     if (query) {
       setLoading(true);
+      setResults([]); // Clear previous results
+      setPageToken(""); // Reset pagination
+      setHasMore(true); // Reset pagination state
+
       const response = await api.get(`/api/search`, {
         params: { q: query },
       });
       setLoading(false);
       setResults(response.data.items);
+      setPageToken(response.data.nextPageToken || ""); // Set the next page token
     }
   };
 
@@ -43,18 +48,57 @@ const VideoSearch = ({ addVideo, username }) => {
     setAddedSucess(false);
   };
 
+  // Infinite Scroll Effect for Scrollable Container
+  useEffect(() => {
+    const fetchMoreVideos = async () => {
+      if (!query || !pageToken || !hasMore) return;
+
+      setLoading(true);
+      const response = await api.get(`/api/search`, {
+        params: { q: query, pageToken },
+      });
+      setLoading(false);
+
+      const newItems = response.data.items || [];
+      setResults((prev) => [...prev, ...newItems]); // Append new items
+      setPageToken(response.data.nextPageToken || ""); // Update page token
+      setHasMore(!!response.data.nextPageToken); // Update "has more" status
+    };
+
+    const observerRefCurrent = observerRef.current;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading) {
+          fetchMoreVideos(); // Fetch more videos when bottom is reached
+        }
+      },
+      { root: videoListRef.current, threshold: 1.0 } // Observe within the scrollable container
+    );
+
+    if (observerRefCurrent) {
+      observer.observe(observerRefCurrent);
+    }
+
+    return () => {
+      if (observerRefCurrent) {
+        observer.unobserve(observerRefCurrent);
+      }
+    };
+  }, [loading, query, pageToken, hasMore]);
+
   return (
     <div className="flex justify-end md:justify-start">
-      <label className="btn btn-primary mb-2 btn-sm" for="modal-1">
+      <label className="btn btn-primary mb-2 btn-sm" htmlFor="modal-1">
         Adicionar vídeo
       </label>
       <input className="modal-state" id="modal-1" type="checkbox" />
 
       <div className="modal">
-        <label className="modal-overlay" for="modal-1"></label>
+        <label className="modal-overlay" htmlFor="modal-1"></label>
         <div className="modal-content flex flex-col gap-5 p-4">
           <label
-            for="modal-1"
+            htmlFor="modal-1"
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
           >
             ✕
@@ -80,7 +124,7 @@ const VideoSearch = ({ addVideo, username }) => {
           </form>
           <VideoSearchItemsModal videos={results} />
           <div>
-            {loading ? (
+            {loading && results.length === 0 ? (
               <div className="w-full flex items-center justify-center my-4">
                 <div className="spinner-simple"></div>
               </div>
@@ -97,46 +141,51 @@ const VideoSearch = ({ addVideo, username }) => {
                     </div>
                   </div>
                 )}
-                {results.map((video) => (
-                  <div
-                    key={video.id.videoId}
-                    className=" px-2 py-1 flex justify-center pt-2 my-1"
-                  >
-                    <img
-                      src={video.snippet.thumbnails.default.url}
-                      alt={video.snippet.title}
-                      className="w-14 h-auto mr-3"
-                    />
-                    <div className="text-sm grow mr-2">
-                      {video.snippet.title}
-                    </div>
-                    <button
-                      className="btn btn-primary btn-sm text-sm"
-                      onClick={() =>
-                        handleAddVideoToQueue({
-                          id: video.id.videoId,
-                          title: video.snippet.title,
-                          thumbnail: video.snippet.thumbnails.default.url,
-                          user: username,
-                        })
-                      }
+                <div
+                  id="video-list"
+                  ref={videoListRef}
+                  className="overflow-y-auto h-80 border border-gray-300 p-2 rounded-lg"
+                >
+                  {results.map((video) => (
+                    <div
+                      key={video.id.videoId}
+                      className="px-2 py-1 flex justify-center pt-2 my-1"
                     >
-                      <FaPlus />
-                    </button>
-                  </div>
-                ))}
+                      <img
+                        src={video.snippet.thumbnails.default.url}
+                        alt={video.snippet.title}
+                        className="w-14 h-auto mr-3"
+                      />
+                      <div className="text-sm grow mr-2">
+                        {video.snippet.title}
+                      </div>
+                      <button
+                        className="btn btn-primary btn-sm text-sm"
+                        onClick={() =>
+                          handleAddVideoToQueue({
+                            id: video.id.videoId,
+                            title: video.snippet.title,
+                            thumbnail: video.snippet.thumbnails.default.url,
+                            user: username,
+                          })
+                        }
+                      >
+                        <FaPlus />
+                      </button>
+                    </div>
+                  ))}
+                  {loading && (
+                    <div className="w-full flex items-center justify-center my-4">
+                      <div className="spinner-simple"></div>
+                    </div>
+                  )}
+                  <div ref={observerRef} className="h-10"></div>
+                </div>
               </>
             )}
           </div>
           <div className="flex gap-3">
-            {results.length > 0 && (
-              <button className="btn btn-primary" onClick={() => setResults([])}>
-                <FaRegTrashCan className="mr-2" />
-                Limpar
-              </button>
-            )}
-
-            <label className="btn btn-block" for="modal-1">
+            <label className="btn btn-block" htmlFor="modal-1">
               Voltar
             </label>
           </div>
