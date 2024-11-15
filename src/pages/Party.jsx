@@ -117,7 +117,31 @@ const Party = ({ admin = false }) => {
           type="button"
           className="btn btn-outline-primary btn-sm border-gray-500 text-gray-500 text-xs hover:bg-transparent hover:text-gray-500"
           onClick={() => {
-            navigator.clipboard.writeText(code);
+            if (navigator.share) {
+              // Tentativa de compartilhar com a API nativa
+              navigator
+                .share({
+                  title: "Código da festa",
+                  text: `Junte-se à festa com o código: ${code}`,
+                })
+                .catch((error) => {
+                  if (error.name === "AbortError") {
+                    console.log("Compartilhamento cancelado pelo usuário.");
+                  } else {
+                    console.error("Erro ao compartilhar:", error);
+                  }
+                });
+            } else {
+              // Fallback para navegadores que não suportam a API
+              navigator.clipboard
+                .writeText(code)
+                .then(() => {
+                  alert("Código copiado para a área de transferência!");
+                })
+                .catch((error) => {
+                  console.error("Erro ao copiar código:", error);
+                });
+            }
           }}
         >
           <FaRegCopy className="mr-2" />
