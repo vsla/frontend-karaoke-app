@@ -62,7 +62,6 @@ const VideoPlayer = () => {
     };
 
     const onPlayerStateChange = (event) => {
-      console.log(event.data, window.YT.PlayerState);
       if (event.data === window.YT.PlayerState.ENDED) {
         setTimeout(() => {
           nextVideo();
