@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+**Frontend Karaoke App**
+=========================
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Project Overview**
+-------------------
 
-## Available Scripts
+The Frontend Karaoke App is a web application built with React and TypeScript. It allows users to create and join karaoke parties, search for videos, and queue them for playback. The app is designed to provide a fun and interactive experience for users, with features such as real-time video playback, song queuing, and user authentication.
 
-In the project directory, you can run:
+**Key Features**
 
-### `npm start`
+* Create and join karaoke parties
+* Search for videos and add them to the queue
+* Real-time video playback
+* User authentication and authorization
+* Responsive design for desktop and mobile devices
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Table of Contents**
+-----------------
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* [Getting Started](#getting-started)
+* [Environment Variables](#environment-variables)
+* [Technologies Used](#technologies-used)
+* [Contributing](#contributing)
+* [License](#license)
+* [Acknowledgments](#acknowledgments)
 
-### `npm test`
+**Getting Started**
+-----------------
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To run the Frontend Karaoke App locally, follow these steps:
 
-### `npm run build`
+### Step 1: Clone the repository
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+git clone https://github.com/your-username/frontend-karaoke-app.git
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Step 2: Install dependencies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+cd frontend-karaoke-app
+npm install
+```
 
-### `npm run eject`
+### Step 3: Create a `.env` file
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Create a new file named `.env` in the root directory and add the following environment variables:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```makefile
+REACT_APP_API_URL=http://localhost:3001
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Step 4: Start the development server
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm start
+```
 
-## Learn More
+### Step 5: Open the app in your browser
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Open your browser and visit `http://localhost:3000` to see the app in action.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Environment Variables**
+-------------------------
 
-### Code Splitting
+The Frontend Karaoke App requires the following environment variables to be set:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+* `REACT_APP_API_URL`: The URL of the backend API server.
 
-### Analyzing the Bundle Size
+**Technologies Used**
+--------------------
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+* React
+* TypeScript
+* React Router
+* React Beautiful DnD
+* React DnD Touch Backend
+* Axios
+* Socket.io
+* Tailwind CSS
 
-### Making a Progressive Web App
+**Contributing**
+--------------
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
-### Advanced Configuration
+**License**
+---------
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-### Deployment
+**Acknowledgments**
+-----------------
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* Thanks to the React and TypeScript communities for their support and resources.
+* Special thanks to the creators of the various libraries and frameworks used in this project.
