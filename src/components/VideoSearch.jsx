@@ -96,7 +96,7 @@ const VideoSearch = ({ addVideo, username }) => {
 
       <div className="modal">
         <label className="modal-overlay" htmlFor="modal-1"></label>
-        <div className="modal-content flex flex-col gap-5 p-4">
+        <div className="modal-content w-full  sm:px-8 flex flex-col gap-5 !pr-4 !pl-4 !p-4">
           <label
             htmlFor="modal-1"
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"

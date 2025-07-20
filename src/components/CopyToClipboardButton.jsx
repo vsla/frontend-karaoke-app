@@ -16,7 +16,7 @@ export const CopyToClipboardButton = ({ code }) => {
     navigator
       .share({
         title: "Código da festa",
-        text: `Junte-se à festa com o código: ${code}`,
+        text: `${code}`,
       })
       .catch((error) => {
         if (error.name === "AbortError") {
